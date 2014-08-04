@@ -434,9 +434,6 @@ func (f *FlagSet) parseFlag(flag *Flag, split []string, args []string, s string)
 
 	if len(split) == 1 {
 		if _, ok := flag.Value.(*boolValue); !ok {
-
-			// if len of args == 0 report error.
-
 			if len(args) == 0 {
 				return f.failf("flag needs an argument: %s", s)
 			}
@@ -451,7 +448,6 @@ func (f *FlagSet) parseFlag(flag *Flag, split []string, args []string, s string)
 		} else {
 
 			// no spaces allowed for boolean
-			//so if the flag exists then set it to true.
 			f.setFlag(flag, "true", s)
 		}
 
@@ -460,25 +456,25 @@ func (f *FlagSet) parseFlag(flag *Flag, split []string, args []string, s string)
 			return err
 		}
 	}
-	// fmt.Printf("Flag %v set to %v\n", flag.Name, flag.Value)
+
 	return f.parseArgs(args)
 
 }
 
 func (f *FlagSet) parseArgs(args []string) (err error) {
+
 	for len(args) > 0 {
 		s := args[0]
-		// fmt.Println("args[0] is ", s)
 		args = args[1:]
 		if len(s) == 0 || s[0] != '-' || len(s) == 1 {
 			if !f.interspersed {
+
 				f.args = append(f.args, s)
 				f.args = append(f.args, args...)
 				return nil
 			}
 
 			f.args = append(f.args, s)
-			// fmt.Println("Args is currently ", f.args)
 			continue
 		}
 
@@ -502,9 +498,7 @@ func (f *FlagSet) parseArgs(args []string) (err error) {
 				}
 				return f.failf("unknown flag: --%s", name)
 			}
-
-			f.parseFlag(flag, split, args, s)
-
+			return f.parseFlag(flag, split, args, s)
 		} else {
 
 			shorthand := s[1:] //single-dash preceded flag name + value
@@ -534,11 +528,10 @@ func (f *FlagSet) parseArgs(args []string) (err error) {
 					f.usage()
 					return ErrHelp
 				}
-
-				return f.failf("unknown  flag: %s in -%s", name, shorthand)
+				return f.failf("unknown flag: %s in -%s", name, shorthand)
 			}
-			// fmt.Println("parsing short flag ", flag.Name)
-			return f.parseFlag(flag, split, args, s) // because the short and long flags are the same.
+
+			return f.parseFlag(flag, split, args, s)
 
 		}
 	}

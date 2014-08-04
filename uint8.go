@@ -19,6 +19,10 @@ func (i *uint8Value) Set(s string) error {
 	return err
 }
 
+func (i *uint8Value) Type() string {
+	return "uint8"
+}
+
 func (i *uint8Value) String() string { return fmt.Sprintf("%v", *i) }
 
 // Uint8Var defines a uint8 flag with specified name, default value, and usage string.

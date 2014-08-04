@@ -19,6 +19,10 @@ func (i *uintValue) Set(s string) error {
 	return err
 }
 
+func (i *uintValue) Type() string {
+	return "uint"
+}
+
 func (i *uintValue) String() string { return fmt.Sprintf("%v", *i) }
 
 // UintVar defines a uint flag with specified name, default value, and usage string.

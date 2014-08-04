@@ -19,6 +19,10 @@ func (f *float64Value) Set(s string) error {
 	return err
 }
 
+func (f *float64Value) Type() string {
+	return "float64"
+}
+
 func (f *float64Value) String() string { return fmt.Sprintf("%v", *f) }
 
 // Float64Var defines a float64 flag with specified name, default value, and usage string.

@@ -19,6 +19,10 @@ func (f *float32Value) Set(s string) error {
 	return err
 }
 
+func (f *float32Value) Type() string {
+	return "float32"
+}
+
 func (f *float32Value) String() string { return fmt.Sprintf("%v", *f) }
 
 // Float32Var defines a float32 flag with specified name, default value, and usage string.

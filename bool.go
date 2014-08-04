@@ -19,6 +19,10 @@ func (b *boolValue) Set(s string) error {
 	return err
 }
 
+func (b *boolValue) Type() string {
+	return "bool"
+}
+
 func (b *boolValue) String() string { return fmt.Sprintf("%v", *b) }
 
 // BoolVar defines a bool flag with specified name, default value, and usage string.

@@ -19,6 +19,10 @@ func (i *intValue) Set(s string) error {
 	return err
 }
 
+func (i *intValue) Type() string {
+	return "int"
+}
+
 func (i *intValue) String() string { return fmt.Sprintf("%v", *i) }
 
 // IntVar defines an int flag with specified name, default value, and usage string.

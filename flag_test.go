@@ -7,13 +7,14 @@ package pflag_test
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
 	"testing"
 	"time"
 
-	. "github.com/ogier/pflag"
+	. "github.com/coreos/pflag"
 )
 
 var (
@@ -185,18 +186,21 @@ func TestShorthand(t *testing.T) {
 	boolbFlag := f.BoolP("boolb", "b", false, "bool2 value")
 	boolcFlag := f.BoolP("boolc", "c", false, "bool3 value")
 	stringFlag := f.StringP("string", "s", "0", "string value")
-	extra := "interspersed-argument"
+	extra := "something extra"
 	notaflag := "--i-look-like-a-flag"
 	args := []string{
-		"-ab",
-		extra,
-		"-cs",
+		"-a",
+		"-b",
+		"-c",
+		"-s",
 		"hello",
 		"--",
+		extra,
 		notaflag,
 	}
+	f.SetOutput(ioutil.Discard)
 	if err := f.Parse(args); err != nil {
-		t.Fatal(err)
+		t.Error("--i-look-like-a-flag is after the flag terminator, and hence should not throw an error")
 	}
 	if !f.Parsed() {
 		t.Error("f.Parse() = false after Parse")
@@ -214,7 +218,7 @@ func TestShorthand(t *testing.T) {
 		t.Error("string flag should be `hello`, is ", *stringFlag)
 	}
 	if len(f.Args()) != 2 {
-		t.Error("expected one argument, got", len(f.Args()))
+		t.Error("expected two arguments, got", len(f.Args()))
 	} else if f.Args()[0] != extra {
 		t.Errorf("expected argument %q got %q", extra, f.Args()[0])
 	} else if f.Args()[1] != notaflag {
@@ -243,12 +247,16 @@ func (f *flagVar) Set(value string) error {
 	return nil
 }
 
+func (f *flagVar) Type() string {
+	return "user-defined flag type is a slice of strings"
+}
+
 func TestUserDefined(t *testing.T) {
 	var flags FlagSet
 	flags.Init("test", ContinueOnError)
 	var v flagVar
 	flags.VarP(&v, "v", "v", "usage")
-	if err := flags.Parse([]string{"--v=1", "-v2", "-v", "3"}); err != nil {
+	if err := flags.Parse([]string{"--v=1", "-v=2", "-v", "3"}); err != nil {
 		t.Error(err)
 	}
 	if len(v) != 3 {

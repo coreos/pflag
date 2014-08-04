@@ -19,6 +19,10 @@ func (i *uint64Value) Set(s string) error {
 	return err
 }
 
+func (i *uint64Value) Type() string {
+	return "uint64"
+}
+
 func (i *uint64Value) String() string { return fmt.Sprintf("%v", *i) }
 
 // Uint64Var defines a uint64 flag with specified name, default value, and usage string.

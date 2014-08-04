@@ -26,6 +26,10 @@ func (i *ipValue) Get() interface{} {
 	return net.IP(*i)
 }
 
+func (i *ipValue) Type() string {
+	return "ip"
+}
+
 // IPVar defines an net.IP flag with specified name, default value, and usage string.
 // The argument p points to an net.IP variable in which to store the value of the flag.
 func (f *FlagSet) IPVar(p *net.IP, name string, value net.IP, usage string) {

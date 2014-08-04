@@ -18,8 +18,13 @@ func (i *uint16Value) Set(s string) error {
 	*i = uint16Value(v)
 	return err
 }
+
 func (i *uint16Value) Get() interface{} {
 	return uint16(*i)
+}
+
+func (i *uint16Value) Type() string {
+	return "uint16"
 }
 
 // Uint16Var defines a uint flag with specified name, default value, and usage string.

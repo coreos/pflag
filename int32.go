@@ -19,6 +19,10 @@ func (i *int32Value) Set(s string) error {
 	return err
 }
 
+func (i *int32Value) Type() string {
+	return "int32"
+}
+
 func (i *int32Value) String() string { return fmt.Sprintf("%v", *i) }
 
 // Int32Var defines an int32 flag with specified name, default value, and usage string.

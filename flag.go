@@ -431,34 +431,25 @@ func (f *FlagSet) setFlag(flag *Flag, value string, origArg string) error {
 }
 
 func (f *FlagSet) parseFlag(flag *Flag, split []string, args []string, s string) (err error) {
-
-	if len(split) == 1 {
+	if len(split) == 1 { // space follows a long-form flag.
 		if _, ok := flag.Value.(*boolValue); !ok {
 			if len(args) == 0 {
 				return f.failf("flag needs an argument: %s", s)
 			}
-
-			// this is the case where a space follows a long-form flag.
 			if err := f.setFlag(flag, args[0], s); err != nil {
 				return err
 			}
-
-			args = args[1:] // we've used the value up.
-
+			args = args[1:]
 		} else {
-
 			// no spaces allowed for boolean
 			f.setFlag(flag, "true", s)
 		}
-
 	} else {
 		if err := f.setFlag(flag, split[1], s); err != nil {
 			return err
 		}
 	}
-
 	return f.parseArgs(args)
-
 }
 
 func (f *FlagSet) parseArgs(args []string) (err error) {
